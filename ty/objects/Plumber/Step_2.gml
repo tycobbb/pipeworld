@@ -1,3 +1,8 @@
+#macro HEAD_OFFSET_X       8
+#macro FOOT_LEFT_OFFSET_X  2
+#macro FOOT_RIGHT_OFFSET_X 2
+#macro SIDE_OFFSET_Y       8
+
 // -----------
 // -- debug --
 // -----------
@@ -42,22 +47,22 @@ _px_collision = clamp(_px_collision, 0, room_width - sprite_width);
 // if we're moving up
 if (state.vy < 0) {
 	// check for a head collision at our head
-	if (level_collision(_x0 + 8, _y0) > TILES_NONE) {
+	if (level_collision(_x0 + HEAD_OFFSET_X, _y0) > TILES_NONE) {
 		// then cancel any upwards velocity
 		_vy_collision = 0;
 	}
 }
 
-// ------------
-// -- ground --
-// ------------
+// ----------
+// -- foot --
+// ----------
 
-// if we're not moving up
+// if we're moving down
 if (state.vy >= 0) {
 	// check for a ground collision at our feet
 	if (
-		level_collision(_x0 + 2, _y1) > TILES_NONE ||
-		level_collision(_x1 - 2, _y1) > TILES_NONE
+		level_collision(_x0 + FOOT_LEFT_OFFSET_X,  _y1) > TILES_NONE ||
+		level_collision(_x1 - FOOT_RIGHT_OFFSET_X, _y1) > TILES_NONE
 	) {
 		// then move the player to the top of the tile
 		_py_collision -= state.py % 16 - 1;
@@ -72,13 +77,13 @@ if (state.vy >= 0) {
 // ----------
 
 // check for a left-side collision
-if (level_collision(_x0, _y0 + 8) > TILES_NONE) {
+if (level_collision(_x0, _y0 + SIDE_OFFSET_Y) > TILES_NONE) {
 	// then move the player to the right of the tile
 	_px_collision += 16 - state.px % 16;
 }
 
 // check for a right-side collision
-if (level_collision(_x1, _y0 + 8) > TILES_NONE) {
+if (level_collision(_x1, _y0 + SIDE_OFFSET_Y) > TILES_NONE) {
 	// then move the player to the left of the tile
 	_px_collision -= state.px % 16;
 }
